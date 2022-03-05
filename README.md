@@ -1,12 +1,12 @@
-#ubuntu-configs
+# ubuntu-configs
 
-##Install:
+## Install:
 - i3
 - dunst
 - polybar
 - pamixer
 
-##Additional Installs: 
+## Additional Installs: 
 - brave
 - firefox
 - joplin
