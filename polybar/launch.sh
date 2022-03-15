@@ -1,9 +1,13 @@
 # Terminate already running bar instances
 killall -q polybar
-# If all your bars have ipc enabled, you can also use 
-# polybar-msg cmd quit
 
-# Launch Polybar, using default config location ~/.config/polybar/config
-polybar the_one_bar 2>&1 | tee -a /tmp/polybar.log & disown
+# https://github.com/polybar/polybar/issues/763
+if type "xrandr"; then
+  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+    MONITOR=$m polybar --reload the_one_bar &
+  done
+else
+  polybar --reload the_one_bar &
+fi
 
 echo "Polybar launched..."

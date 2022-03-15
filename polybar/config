@@ -3,17 +3,17 @@ margin-top = 32
 margin-bottom = 22
 
 [colors]
-
 primary = #000C66
 secondary = #e60053
 alert = #bd2c40
 
 background = #050A30
 foreground = #7EC8E3
-underline = #0000FF
+
+mod_underline = #f90000
 
 [bar/the_one_bar]
-;monitor = ${env:MONITOR}
+monitor = ${env:MONITOR}
 bottom = false
 border-size = 1
 width = 100%
@@ -34,39 +34,33 @@ locale = en_US.UTF-8
 font-0 = Ubuntu:style=Regular
 font-1 = "Font Awesome 6 Free:style=Regular:size=12;0"
 font-2 = "Font Awesome 6 Free:style=Solid:size=12;0"
-font-3 = "Font Awesome 6 Brands:style=Regular:size=12;0"
-modules-left = cpu memory network backlight ewmh
-modules-center = date
+modules-left = cpu fan_speed memory backlight workspace
+modules-center = date time
 modules-right = volume microphone battery uptime power_off
 
 line-size = 3
 tray-position = right
 tray-padding = 1
-tray-transparent = true
 wm-restack = i3
+separator = | 
 
-[module/ewmh]
+[module/fan_speed]
+type = custom/script
+exec = ~/.config/polybar/polybar-scripts/system-fan-speed.sh
+interval = 10
+format-prefix = " "
+format-padding = 2
+format-underline = ${colors.mod_underline}
+format-background = ${colors.primary}
+
+[module/workspace]
 type = internal/xworkspaces
-
 ; Only show workspaces defined on the same output as the bar
-;
 ; Useful if you want to show monitor specific workspaces
 ; on different bars
-;
-; Default: false
 pin-workspaces = false
-
-; Create click handler used to focus desktop
-; Default: true
 enable-click = true
-
-; Create scroll handlers used to cycle desktops
-; Default: true
 enable-scroll = false
-
-; Reverse the scroll direction
-; Default: false
-; New in version 3.6.0
 reverse-scroll = true
 
 
@@ -77,47 +71,32 @@ tail = true
 click-left = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --toggle &
 scroll-up = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --increase &
 scroll-down = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --decrease &
-
-[module/network]
-type = internal/network
-interface = wlp2s0
-interval = 3.0
-
-unknown-as-up = true
-
-format-connected = <label-connected>
-format-prefix = 
-format-disconnected = <label-disconnected>
-
-format-packetloss = <animation-packetloss> <label-packetloss>
-
-label-connected = %downspeed:9%
-
-label-disconnected = No Internet
-label-disconnected-foreground = #66ffffff
-
-label-packetloss = %essid%
-label-packetloss-foreground = #eefafafa
-
-animation-packetloss-0 = ⚠
-animation-packetloss-0-foreground = #ffa64c
-animation-packetloss-1 = 📶
-animation-packetloss-1-foreground = #000000
-; Framerate in milliseconds
-animation-packetloss-framerate = 500
+format-prefix = ""
 
 [module/power_off]
 type = custom/text
-content =  Ubuntu
+click-right = systemctl poweroff
+content = 
 
 [module/date]
 type = internal/date
 interval = 1.0
 
 date = %Y-%m-%d%
+date-alt = %A, %d %B %Y
 
-; Optional time format
-time = %H:%M
+format = <label>
+label =  %date%  
+
+[module/time]
+type = internal/date
+interval = 1.0
+
+time = %H.%M
+time-alt = %H:%M:%S
+
+format = <label>
+label =  🕓 %time%
 
 [module/battery]
 ;https://config.phundrak.com/Deprecated/polybar.html is used
@@ -138,7 +117,7 @@ label-charging = %percentage%%
 label-discharging = %percentage%%
 label-full = %percentage%%
 
-; Only applies if <ramp-capacity> is used
+; Shows ramp capacity
 ramp-capacity-0 = 
 ramp-capacity-1 = 
 ramp-capacity-2 = 
@@ -148,7 +127,7 @@ ramp-capacity-4 = 
 ; Only applies if <bar-capacity> is used
 bar-capacity-width = 10
 
-; Only applies if <animation-charging> is used
+; Shows charging animation
 animation-charging-0 = 
 animation-charging-1 = 
 animation-charging-2 = 
@@ -161,8 +140,8 @@ animation-charging-framerate = 750
 type = internal/backlight
 label = %percentage%%
 format-prefix = " "
-format-underline = #ffffff
 format-padding = 2
+format-underline = ${colors.mod_underline}
 format-background = ${colors.primary}
 card = amdgpu_bl0
 enable-scroll = true
@@ -172,8 +151,8 @@ type = internal/cpu
 interval = 3
 label = %percentage%%
 format-prefix = " "
-format-underline = #f90000
 format-padding = 2
+format-underline = ${colors.mod_underline}
 format-background = ${colors.primary}
 
 [module/memory]
@@ -181,13 +160,15 @@ type = internal/memory
 interval = 3
 label = %percentage_used%%
 format-prefix = " "
-format-underline = #f90000
 format-padding = 2
+format-underline = ${colors.mod_underline}
 format-background = ${colors.primary}
 
 [module/volume]
 type = internal/pulseaudio
-sink = alsa_output.pci-0000_12_00.3.analog-stereo
+# Shows the bluetooth sink (if connected), or else defaults to default sink
+# Use `pacmd list-sinks` to find all sinks
+sink = bluez_sink.F7_42_73_ED_59_98.a2dp_sink
 
 use-ui-max = true
 format-volume = <ramp-volume> <label-volume>
