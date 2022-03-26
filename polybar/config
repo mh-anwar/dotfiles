@@ -36,7 +36,7 @@ font-1 = "Font Awesome 6 Free:style=Regular:size=12;0"
 font-2 = "Font Awesome 6 Free:style=Solid:size=12;0"
 modules-left = cpu fan_speed memory backlight workspace
 modules-center = date time
-modules-right = volume microphone battery uptime power_off
+modules-right = volume microphone battery uptime
 
 line-size = 3
 tray-position = right
@@ -73,17 +73,12 @@ scroll-up = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --increas
 scroll-down = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --decrease &
 format-prefix = ""
 
-[module/power_off]
-type = custom/text
-click-right = systemctl poweroff
-content = 
-
 [module/date]
 type = internal/date
 interval = 1.0
 
-date = %Y-%m-%d%
-date-alt = %A, %d %B %Y
+date = %A, %d %B %Y
+date-alt = %Y-%m-%d%
 
 format = <label>
 label =  %date%  
@@ -144,7 +139,6 @@ format-padding = 2
 format-underline = ${colors.mod_underline}
 format-background = ${colors.primary}
 card = amdgpu_bl0
-enable-scroll = true
 
 [module/cpu]
 type = internal/cpu
