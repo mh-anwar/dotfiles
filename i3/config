@@ -54,6 +54,8 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
+focus_follows_mouse no
+
 # change focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down
@@ -86,6 +88,7 @@ bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
+popup_during_fullscreen smart
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -178,14 +181,18 @@ bindsym $mod+r mode "resize"
 
 #i3-gaps
 for_window [class=".*"] border pixel 0
-gaps inner 5
+gaps inner 7
 hide_edge_borders both
-
+smart_gaps on 
 
 exec --no-startup-id firefox
 exec --no-startup-id blueman-applet
 exec --no-startup-id kdeconnect-indicator
+exec --no-startup-id flameshot
+# My custom key bindings
 
+# Screnshot application
+bindsym --release Print exec flameshot guiE
 # Lock screen
 bindsym $mod+shift+p exec ~/.i3/lock
 
@@ -195,3 +202,5 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/i3/xrandr_layout.sh
 
 exec_always --no-startup-id xsetroot -solid "#0e111e"
+
+exec_always --no-startup-id copyq

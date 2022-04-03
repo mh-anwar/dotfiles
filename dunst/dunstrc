@@ -5,43 +5,16 @@
 
     # Which monitor should the notifications be displayed on.
     monitor = 0
+    # monitor option above is ignored, if mouse is on a different screen
+    follow = mouse
 
-    # Display notification on focused monitor.  Possible modes are:
-    #   mouse: follow mouse pointer
-    #   keyboard: follow window with keyboard focus
-    #   none: don't follow anything
-    #
-    # "keyboard" needs a window manager that exports the
-    # _NET_ACTIVE_WINDOW property.
-    # This should be the case for almost all modern window managers.
-    #
-    # If this option is set to mouse or keyboard, the monitor option
-    # will be ignored.
-    follow = none
-
-    ### Geometry ###
-
-    # dynamic width from 0 to 300
-    # width = (0, 300)
-    # constant width of 300
     width = 300
-
-    # The maximum height of a single notification, excluding the frame.
     height = 300
-
-    # Position the notification in the top right corner
     origin = top-right
-
-    # Offset from the origin
     offset = 10x50
-
-    # Scale factor. It is auto-detected if value is 0.
     scale = 0
-
-    # Maximum number of notification (0 means no limit)
+    # 0 meaning no limit to notifications
     notification_limit = 0
-
-    ### Progress bar ###
 
     # Turn on the progess bar. It appears when a progress hint is passed with
     # for example dunstify -h int:value:12
@@ -50,46 +23,25 @@
     # Set the progress bar height. This includes the frame, so make sure
     # it's at least twice as big as the frame width.
     progress_bar_height = 10
-
-    # Set the frame width of the progress bar
     progress_bar_frame_width = 1
-
-    # Set the minimum width for the progress bar
     progress_bar_min_width = 150
-
-    # Set the maximum width for the progress bar
     progress_bar_max_width = 300
 
-
-    # Show how many messages are currently hidden (because of
-    # notification_limit).
+    # Show how many messages are currently hidden
     indicate_hidden = yes
 
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.). (X11 only)
     transparency = 0
-
-    # Draw a line of "separator_height" pixel height between two
-    # notifications.
-    # Set to 0 to disable.
     separator_height = 2
-
-    # Padding between text and separator.
     padding = 8
-
-    # Horizontal padding.
     horizontal_padding = 8
-
-    # Padding between text and icon.
     text_icon_padding = 0
-
-    # Defines width in pixels of frame around the notification window.
-    # Set to 0 to disable.
     frame_width = 3
 
     # Defines color of the frame around the notification window.
-    frame_color = "#aaaaaa"
+    frame_color = "#000066"
 
     # Define a color for the separator.
     # possible values are:
