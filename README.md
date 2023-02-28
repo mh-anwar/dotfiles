@@ -1,17 +1,18 @@
 # dotfiles
 This repo contains important applications as well custom configs (i3, dunst, polybar)
 
-## Install (I often forget applications that I've installed):
-- i3 (as well as betterlockscreen and i3lock-color)
+## Installs:
+- i3 (as well as betterlockscreen)
 - dunst
 - polybar
-- pamixer
+- pamixer + pavucontrol
 - brave
 - firefox
 - keepassxc
-- kdeconnect
+- valent (modern KDEConnect)
 - zsh (ohmyzsh)
 - lyrebird
 - LyX
 - calibre
 - flameshot
+- solaar
