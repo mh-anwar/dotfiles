@@ -1,0 +1,8 @@
+configuration {
+  modes: [ combi ];
+  combi-modes: [ window, drun, run ];
+}
+
+
+@theme "/usr/share/rofi/themes/spotlight-dark.rasi"
+

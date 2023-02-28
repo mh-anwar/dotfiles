@@ -1,0 +1,6 @@
+# Stop bluetooth
+systemctl stop bluetooth
+
+# Reduce brightness
+
+

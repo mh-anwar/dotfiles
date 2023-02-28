@@ -1,0 +1,187 @@
+[global/wm]
+margin-top = 32
+margin-bottom = 22
+
+[colors]
+primary = #0f1126
+secondary = #e60053
+alert = #bd2c40
+
+background = #000f40
+foreground = #7EC8E3
+
+mod_underline = #363959
+
+[bar/the_one_bar]
+monitor = ${env:MONITOR}
+bottom = true
+border-size = 1
+width = 100%
+height = 25
+radius = 5.0
+fixed-center = true
+
+padding-left = 2
+padding-right = 4
+module-margin-left = 1
+module-margin-right = 2
+
+background = ${colors.background}
+line-color = #f00
+border-color = #00000000
+
+locale = en_US.UTF-8
+font-0 = Ubuntu:style=Regular
+font-1 = "Font Awesome 6 Free:style=Regular:size=12;0"
+font-2 = "Font Awesome 6 Free:style=Solid:size=12;0"
+modules-left = cpu fan_speed memory backlight workspace
+modules-center = date time
+modules-right = volume microphone battery uptime
+
+line-size = 3
+tray-position = right
+tray-padding = 1
+wm-restack = i3
+separator = | 
+
+
+[module/fan_speed]
+type = custom/script
+exec = ~/.config/polybar/polybar-scripts/system-fan-speed.sh
+interval = 10
+format-prefix = " "
+format-padding = 2
+format-underline = ${colors.mod_underline}
+format-background = ${colors.primary}
+
+
+[module/workspace]
+type = internal/xworkspaces
+; Only show workspaces defined on the same output as the bar
+; Useful if you want to show monitor specific workspaces
+; on different bars
+pin-workspaces = false
+enable-click = true
+enable-scroll = false
+reverse-scroll = true
+
+
+[module/microphone]
+type = custom/script
+exec = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh
+tail = true
+click-left = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --toggle &
+scroll-up = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --increase &
+scroll-down = ~/.config/polybar/polybar-scripts/pulseaudio-microphone.sh --decrease &
+format-prefix = ""
+
+[module/date]
+type = internal/date
+interval = 1.0
+
+date = %A, %d %B %Y
+date-alt = %Y-%m-%d%
+
+format = <label>
+label =   %date%  
+
+[module/time]
+type = internal/date
+interval = 1.0
+
+time = %H.%M
+time-alt = %H:%M:%S
+
+format =  <label>
+label =   🕓  %time%
+
+[module/battery]
+;https://config.phundrak.com/Deprecated/polybar.html is used
+type = internal/battery
+full-at = 99
+
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP1
+
+poll-interval = 5
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <ramp-capacity> <label-full>
+
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-full = %percentage%%
+
+; Shows ramp capacity
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+; Only applies if <bar-capacity> is used
+bar-capacity-width = 10
+
+; Shows charging animation
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+; Framerate in milliseconds
+animation-charging-framerate = 750
+
+[module/backlight]
+type = internal/backlight
+label = %percentage%%
+format-prefix = " "
+format-padding = 2
+format-underline = ${colors.mod_underline}
+format-background = ${colors.primary}
+card = amdgpu_bl0
+
+[module/cpu]
+type = internal/cpu
+interval = 3
+label = %percentage%%
+format-prefix = " "
+format-padding = 2
+format-underline = ${colors.mod_underline}
+format-background = ${colors.primary}
+
+[module/memory]
+type = internal/memory
+interval = 3
+label = %percentage_used%%
+format-prefix = " "
+format-padding = 2
+format-underline = ${colors.mod_underline}
+format-background = ${colors.primary}
+
+[module/volume]
+type = internal/pulseaudio
+# Shows the bluetooth sink (if connected), or else defaults to default sink
+# Use `pacmd list-sinks` to find all sinks
+sink = bluez_sink.F7_42_73_ED_59_98.a2dp_sink
+
+use-ui-max = true
+format-volume = <ramp-volume> <label-volume>
+format-muted = <label-muted>
+
+label-volume = %percentage%%
+label-muted =  %percentage%%
+label-muted-foreground = #666
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+
+[module/uptime]
+type = custom/script
+exec = $HOME/.config/polybar/polybar-scripts/system-uptime-pretty.sh
+interval = 30
+format-prefix = " "
+format-padding = 2
+
