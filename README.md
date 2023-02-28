@@ -1,5 +1,5 @@
 # dotfiles
-This repo contains important applications as well custom configs (i3, dunst, polybar)
+This repository contains important/custom linux application configs (specifically, i3, polybar and rofi).
 
 ## Installs:
 - i3 (as well as betterlockscreen)
