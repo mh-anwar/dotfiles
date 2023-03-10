@@ -186,8 +186,7 @@ for_window [class=".*"] border pixel 0
 exec --no-startup-id firefox
 exec --no-startup-id blueman-applet
 exec --no-startup-id flameshot
-exec --no-startup-id Valent
-exec --no-startup-id brave-browser
+exec --no-startup-id kdeconnect-applet
 
 # My custom key bindings
 bindsym --release Print exec flameshot gui
