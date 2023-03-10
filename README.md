@@ -9,7 +9,7 @@ This repository contains important/custom linux application configs (specificall
 - brave
 - firefox
 - keepassxc
-- valent (modern KDEConnect)
+- kdeconnect
 - zsh (ohmyzsh)
 - lyrebird
 - LyX
