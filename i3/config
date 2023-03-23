@@ -191,6 +191,8 @@ exec --no-startup-id kdeconnect-applet
 # My custom key bindings
 bindsym --release Print exec flameshot gui
 
+bindsym shift+Print exec flameshot gui
+
 # Lock screen
 bindsym $mod+shift+p exec $HOME/.config/i3/i3lock-multimonitor/lock -i "$HOME/.config/i3/i3lock-multimonitor/lockscreen.png"
 
@@ -201,7 +203,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/i3/xrandr_layout.sh
 
 # feh command for wallpaper
-exec_always feh --bg-scale ./.config/i3/sharingan.png ./.config/i3/dune_wallpaper.png ./.config/i3/dune_wallpaper.png 
+exec_always feh --bg-scale ./.config/i3/titan.png
 
 # Cliboard 
 exec_always --no-startup-id copyq
