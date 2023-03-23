@@ -7,7 +7,7 @@ primary = #0f1126
 secondary = #e60053
 alert = #bd2c40
 
-background = #000f40
+background = #000514
 foreground = #7EC8E3
 
 mod_underline = #363959
