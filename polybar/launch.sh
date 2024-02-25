@@ -10,4 +10,4 @@ else
   polybar --reload the_one_bar &
 fi
 
-echo "Polybar launched..."
+# echo "Polybar launched..."
