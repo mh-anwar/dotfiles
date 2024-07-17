@@ -4,7 +4,7 @@ status() {
   MUTED=$(pacmd list-sources | awk '/\*/,EOF {print}' | awk '/muted/ {print $2; exit}')
 
   if [ "$MUTED" = "yes" ]; then
-    echo " doinke"
+    echo ""
   else
     pacmd list-sources | grep "\* index:" -A 7 | grep volume | awk -F/ '{print $2}' | tr -d ' '  
   fi
@@ -22,23 +22,21 @@ listen() {
 
 toggle() {
   MUTED=$(pacmd list-sources | awk '/\*/,EOF {print}' | awk '/muted/ {print $2; exit}')
-  DEFAULT_SOURCE=$(pacmd list-sources | awk '/\*/,EOF {print $3; exit}')
 
   if [ "$MUTED" = "yes" ]; then
-      pactl set-source-mute "$DEFAULT_SOURCE" 0
+      pactl set-source-mute @DEFAULT_SOURCE@ 0
   else
-      pactl set-source-mute "$DEFAULT_SOURCE" 1
+      pactl set-source-mute @DEFAULT_SOURCE@ 1
   fi
 }
 
 increase() {
-  DEFAULT_SOURCE=$(pacmd list-sources | awk '/\*/,EOF {print $3; exit}')
-  pactl set-source-volume "$DEFAULT_SOURCE" +5%
+  pactl set-source-volume @DEFAULT_SOURCE@ +5%
+  echo "hi"
 }
 
 decrease() {
-  DEFAULT_SOURCE=$(pacmd list-sources | awk '/\*/,EOF {print $3; exit}')
-  pactl set-source-volume "$DEFAULT_SOURCE" -5%
+  pactl set-source-volume @DEFAULT_SOURCE@ -5%
 }
 
 case "$1" in
