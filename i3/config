@@ -18,7 +18,8 @@ font pango:DejaVu Sans Mono 8
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# ^ line above is useless, I think - its locking on inactivity
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -41,7 +42,7 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -186,8 +187,9 @@ for_window [class=".*"] border pixel 0
 exec --no-startup-id firefox
 exec --no-startup-id blueman-applet
 exec --no-startup-id flameshot
-exec --no-startup-id kdeconnectd
+exec --no-startup-id kdeconnect-indicator
 exec_always --no-startup-id copyq # clipboard
+exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 
 # Keybindings to execute screenshot
 bindsym --release Print exec flameshot gui
@@ -200,11 +202,26 @@ bindsym $mod+shift+p exec $HOME/.config/i3/i3lock-multimonitor/lock -i "$HOME/.c
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Xrandr layout for monitors
-exec_always --no-startup-id $HOME/.config/i3/xrandr_layout.sh
+# exec_always --no-startup-id $HOME/.config/i3/xrandr_layout.sh
 
 # feh command for wallpaper
-exec_always feh --bg-center ./.config/i3/v2.jpg
+exec_always feh --bg-scale ./.config/i3/worm.jpg ./.config/i3/dune2.jpg ./.config/i3/stand.png
+
+# Next 3 commands were added after installing Ubuntu24
+# execute gnome theme script, this makes everything perfect
+exec --no-startup-id /usr/libexec/gsd-xsettings
+
+# startup compositor 
+# nvm no compositor
+# start pulseaudio daemon
+exec --no-startup-id pulseaudio -D
+
 
 workspace 1 output eDP
 workspace 2 output DisplayPort-0
-workspace 3 output HDMI-A-O
+workspace 2 output HDMI-A-O
+
+exec_always --no-startup-id $HOME/.config/i3/monitors.sh
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
