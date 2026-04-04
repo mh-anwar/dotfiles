@@ -1,0 +1,42 @@
+
+/* Main Notification Window */
+#XfceNotifyWindow {
+    background-color: rgba(26, 27, 38, 0.95); /* Deep charcoal with slight transparency */
+    border: 1.5px solid #414868;               /* Subtle bluish-grey border */
+    border-radius: 10px;                     /* Clean rounded corners */
+    padding: 8px;
+}
+
+/* Title Text (Summary) */
+#XfceNotifyWindow label#summary {
+    font-weight: 700;
+    font-size: 14px;
+    color: #7aa2f7;  /* Soft blue accent */
+    margin-bottom: 2px;
+}
+
+/* Body Text */
+#XfceNotifyWindow label#body {
+    font-size: 13px;
+    color: #c0caf5;  /* Off-white for readability */
+}
+
+/* Icon Styling */
+#XfceNotifyWindow image {
+    margin-right: 12px;
+}
+
+/* Action Buttons (if the notification has them) */
+#XfceNotifyWindow button {
+    background-color: #24283b;
+    border: 1px solid #414868;
+    border-radius: 6px;
+    color: #a9b1d6;
+    padding: 4px 8px;
+    margin-top: 6px;
+}
+
+#XfceNotifyWindow button:hover {
+    background-color: #414868;
+    color: #ffffff;
+}
