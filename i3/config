@@ -177,19 +177,21 @@ for_window [class="rstudio"] title~"~/Documents/university/STAA57/WS1/first_repo
 ## Startup ##
 #############
 exec --no-startup-id /usr/libexec/gsd-xsettings # Gnome theming script (fixes dark mode issues, various UI glitches)
-exec feh --bg-scale ./.config/i3/worm.jpg ./.config/i3/dune2.jpg ./.config/i3/stand.png # Feh for wallpaper management
+exec --no-startup-id feh --bg-scale ./.config/i3/blackhole.jpg ./.config/i3/dune2.jpg ./.config/i3/stormLookout.jpg # Feh for wallpaper management
 exec --no-startup-id pulseaudio -D # Run pulseaudio in the background
 exec --no-startup-id nm-applet # Network manager applet
-exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
+#exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
+exec_always --no-startup-id xfce-notifyd
 
 exec_always --no-startup-id $HOME/.config/i3/monitors.sh
 
+exec firefox # Start Firefox on login
 exec --no-startup-id blueman-applet # Bluetooth manager
 exec --no-startup-id flameshot # Screenshot tool
 exec --no-startup-id kdeconnect-indicator # KDE Connect to phone applet
 exec --no-startup-id copyq # Clipboard manager
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-
+exec keepassxc
 # Keybindings to execute screenshot
 bindsym --release Print exec flameshot gui
 bindsym shift+Print exec flameshot gui
@@ -201,8 +203,11 @@ bindsym $mod+shift+p exec $HOME/.config/i3/i3lock-multimonitor/lock -i "$HOME/.c
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 
+# Enable tap to click
+exec --no-startup-id bash -c 'xinput set-prop 11 334 1'
+
 workspace 1 output eDP
 workspace 2 output DisplayPort-0
 workspace 3 output HDMI-A-O
 
-exec --no-startup-id firefox # Start Firefox on login
+

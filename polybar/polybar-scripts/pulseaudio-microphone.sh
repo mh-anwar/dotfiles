@@ -4,9 +4,10 @@ status() {
   MUTED=$(pacmd list-sources | awk '/\*/,EOF {print}' | awk '/muted/ {print $2; exit}')
 
   if [ "$MUTED" = "yes" ]; then
-    echo ""
+    echo " 0%"
   else
-    pacmd list-sources | grep "\* index:" -A 7 | grep volume | awk -F/ '{print $2}' | tr -d ' '  
+    VOLUME=$(pacmd list-sources | awk '/\* index:/{found=1} found && /volume:/{print $5; exit}')
+    echo " $VOLUME"
   fi
 }
 
@@ -32,7 +33,6 @@ toggle() {
 
 increase() {
   pactl set-source-volume @DEFAULT_SOURCE@ +5%
-  echo "hi"
 }
 
 decrease() {
