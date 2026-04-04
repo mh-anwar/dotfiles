@@ -24,6 +24,13 @@ In `~/.mozilla/<profilecode>` add a directory `chrome` and within it create a `u
 - flameshot
 - solaar
 
+# Gnome Apps [Flatpak install] (that are useful)
+- Decoder: QR codes
+- Hieroglyphic: Drawing to Latex symbol
+- Keypunch: Local typing contest
+- Switcheroo: LOCAL IMAGE TYPE CONVERSION
+- Text Pieces: swiss army knife for a dev
+- Warp: FILE TRANSFER
 
 # Random Fixes
 - Backlight issues:
