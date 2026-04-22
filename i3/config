@@ -19,7 +19,8 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill
 
 # start rofi instead of dmenu for program launching
-bindsym $mod+d exec --no-startup-id $HOME/.config/rofi/scripts/launcher_t6
+#bindsym $mod+d exec --no-startup-id $HOME/.config/rofi/scripts/launcher_t6
+bindsym $mod+d exec --no-startup-id rofi -show drun -theme $HOME/.config/rofi/launchers/type-6/style-1-dune.rasi
 
 focus_follows_mouse no
 
@@ -153,7 +154,7 @@ bindsym $mod+grave exec --no-startup-id kitty --name scratchpad
 
 # Float utility windows — use `xprop` to find class, instance, title, etc.
 for_window [class="Pavucontrol"] floating enable, resize set 800 500
-for_window [class="Blueman-manager"] floating enable, resize set 700 450
+for_window [class="Blueman-manager"] floating enable, resize set 900 650
 for_window [class="KeePassXC" title="^(?!KeePassXC$)"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Copyq"] floating enable
@@ -168,7 +169,8 @@ for_window [window_role="task_dialog"] floating enable
 #############
 exec --no-startup-id /usr/libexec/gsd-xsettings # Gnome theming script (fixes dark mode issues, various UI glitches)
 exec_always --no-startup-id picom --config $HOME/.config/picom/picom.conf -b
-exec --no-startup-id feh --bg-scale $HOME/.config/i3/blackhole.jpg $HOME/.config/i3/dune2.jpg $HOME/.config/i3/stormLookout.jpg # Feh for wallpaper management
+#exec --no-startup-id feh --bg-scale $HOME/.config/i3/blackhole.jpg $HOME/.config/i3/dune2.jpg $HOME/.config/i3/stormLookout.jpg # Feh for wallpaper management
+exec --no-startup-id feh --bg-scale $HOME/.config/i3/stormtrooperblue.jpg $HOME/.config/i3/lockscreen.png $HOME/.config/i3/oldworm.jpg
 exec --no-startup-id nm-applet # Network manager applet
 exec_always --no-startup-id xfce-notifyd
 
@@ -201,7 +203,7 @@ bindsym $mod+Ctrl+d exec --no-startup-id $HOME/.config/i3/docker-toggle.sh
 
 workspace 1 output eDP
 workspace 2 output DisplayPort-0
-workspace 3 output HDMI-A-O
+workspace 3 output HDMI-A-0
 
 ##############
 ## Disabled ##

@@ -1,5 +1,5 @@
 # dotfiles
-This repository contains important/custom linux application configs (specifically, i3, polybar and rofi).
+This repository contains important/custom linux application configs (i3, polybar, rofi, kitty, picom, GTK theme, nvim, and more).
 
 # Firefox
 In `~/.mozilla/<profilecode>` add a directory `chrome` and within it create a `userChrome.css` file. Add:
@@ -9,10 +9,9 @@ In `~/.mozilla/<profilecode>` add a directory `chrome` and within it create a `u
 }
 ```
 ## Installs:
-- i3 (as well as betterlockscreen)
-- dunst
+- i3 (with i3lock-multimonitor)
 - polybar
-- pamixer + pavucontrol
+- pavucontrol
 - brave
 - firefox
 - keepassxc
