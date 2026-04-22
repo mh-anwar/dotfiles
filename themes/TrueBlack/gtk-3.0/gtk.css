@@ -117,9 +117,7 @@ menu menuitem, .menu menuitem {
 }
 
 menu menuitem:hover,
-menu menuitem:active,
 menu menuitem:selected,
-menu menuitem:checked,
 menu menuitem:prelight {
     background-color: @theme_selected_bg_color;
     background-image: none;
@@ -127,11 +125,20 @@ menu menuitem:prelight {
     border-radius: 6px;
 }
 
-menu menuitem *:hover,
-menu menuitem *:active,
-menu menuitem *:selected,
-menu menuitem *:checked,
-menu menuitem *:prelight {
+menu menuitem:active,
+menu menuitem:checked {
+    background-color: transparent;
+    background-image: none;
+    color: @theme_fg_color;
+}
+
+menu menuitem:checked:hover {
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+menu menuitem * {
     background-color: transparent;
     background-image: none;
     color: inherit;
@@ -426,23 +433,38 @@ image {
 
 /* Check and Radio */
 check, radio {
-    min-width: 18px;
-    min-height: 18px;
+    min-width: 14px;
+    min-height: 14px;
+    margin: 0 8px;
     -gtk-icon-source: none;
-    border: 2px solid #505050;
-    border-radius: 4px;
-    background-color: #1a1a1a;
-    color: transparent;
+    border: 1px solid #505050;
+    border-radius: 3px;
+    background-clip: padding-box;
+    background-image: image(#2a2a2a);
+    color: #f0f0f0;
 }
 
 radio {
-    border-radius: 50%;
+    border-radius: 100%;
+}
+
+check:hover, radio:hover {
+    background-image: image(#333333);
+    border-color: #666666;
+}
+
+check:active, radio:active {
+    background-image: image(#1a1a1a);
+    border-color: #404040;
 }
 
 check:checked, radio:checked {
-    background-color: @theme_selected_bg_color;
+    background-image: image(@theme_selected_bg_color);
     border-color: @theme_selected_bg_color;
     color: white;
+}
+
+check:checked {
     -gtk-icon-source: -gtk-icontheme("object-select-symbolic");
 }
 
@@ -450,8 +472,9 @@ radio:checked {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
 }
 
-check:hover, radio:hover {
-    border-color: #777777;
+check:checked:hover, radio:checked:hover {
+    background-image: image(shade(@theme_selected_bg_color, 1.15));
+    border-color: shade(@theme_selected_bg_color, 1.15);
 }
 
 /* Checkbox/radio spacing in menus */
