@@ -1,0 +1,116 @@
+# TrueBlack GTK2 theme - Modern dark
+
+style "default" {
+    bg[NORMAL]        = "#1a1a1a"
+    bg[PRELIGHT]      = "#2a2a2a"
+    bg[ACTIVE]        = "#1e1e1e"
+    bg[SELECTED]      = "#4d8df7"
+    bg[INSENSITIVE]   = "#1a1a1a"
+
+    fg[NORMAL]        = "#e8e8e8"
+    fg[PRELIGHT]      = "#ffffff"
+    fg[ACTIVE]        = "#e8e8e8"
+    fg[SELECTED]      = "#ffffff"
+    fg[INSENSITIVE]   = "#555555"
+
+    base[NORMAL]      = "#141414"
+    base[PRELIGHT]    = "#1e1e1e"
+    base[ACTIVE]      = "#4d8df7"
+    base[SELECTED]    = "#4d8df7"
+    base[INSENSITIVE] = "#1a1a1a"
+
+    text[NORMAL]      = "#e8e8e8"
+    text[PRELIGHT]    = "#ffffff"
+    text[ACTIVE]      = "#ffffff"
+    text[SELECTED]    = "#ffffff"
+    text[INSENSITIVE] = "#555555"
+
+    GtkWidget::focus-line-width = 1
+    GtkWidget::focus-padding = 1
+    GtkButton::child-displacement-x = 0
+    GtkButton::child-displacement-y = 0
+    GtkScrollbar::slider-width = 8
+    GtkScrollbar::has-backward-stepper = 0
+    GtkScrollbar::has-forward-stepper = 0
+    GtkMenuBar::shadow-type = none
+
+    engine "murrine" {
+        animation = TRUE
+        colorize_scrollbar = FALSE
+        contrast = 0.6
+        glazestyle = 0
+        gradient_shades = {1.02, 1.0, 1.0, 0.98}
+        highlight_shade = 1.02
+        lightborder_shade = 1.1
+        lightborderstyle = 0
+        listviewheaderstyle = 0
+        listviewstyle = 2
+        menubarstyle = 0
+        menubaritemstyle = 0
+        menuitemstyle = 0
+        menustyle = 0
+        progressbarstyle = 0
+        reliefstyle = 0
+        roundness = 10
+        scrollbarstyle = 0
+        separatorstyle = 0
+        shadow_shades = {0.6, 0.6}
+        sliderstyle = 0
+        stepperstyle = 1
+        toolbarstyle = 0
+    }
+}
+
+class "GtkWidget" style "default"
+
+style "button" {
+    bg[NORMAL]   = "#2a2a2a"
+    bg[PRELIGHT] = "#333333"
+    bg[ACTIVE]   = "#1e1e1e"
+
+    engine "murrine" {
+        roundness = 10
+        border_shades = {0.9, 0.9}
+    }
+}
+class "GtkButton" style "button"
+
+style "entry" {
+    base[NORMAL] = "#141414"
+    bg[NORMAL]   = "#141414"
+
+    engine "murrine" {
+        roundness = 10
+        border_shades = {0.7, 0.7}
+    }
+}
+class "GtkEntry" style "entry"
+
+style "menubar" {
+    bg[NORMAL] = "#1e1e1e"
+}
+class "GtkMenuBar" style "menubar"
+
+style "menu" {
+    bg[NORMAL] = "#252525"
+    engine "murrine" {
+        roundness = 12
+    }
+}
+class "GtkMenu" style "menu"
+
+style "toolbar" {
+    bg[NORMAL] = "#1e1e1e"
+}
+class "GtkToolbar" style "toolbar"
+
+style "scrollbar" {
+    bg[NORMAL]   = "#3a3a3a"
+    bg[PRELIGHT] = "#505050"
+    bg[ACTIVE]   = "#666666"
+
+    engine "murrine" {
+        roundness = 100
+    }
+}
+class "GtkScrollbar" style "scrollbar"

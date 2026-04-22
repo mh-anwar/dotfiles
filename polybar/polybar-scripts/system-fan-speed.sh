@@ -1,4 +1,3 @@
-#https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts/system-fan-speed
 #!/bin/sh
 
 speed=$(sensors | grep Processor | awk '{print $3; exit}')

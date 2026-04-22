@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=TrueBlack
+Comment=True black modern theme with rounded corners
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=TrueBlack
+MetacityTheme=TrueBlack
+IconTheme=Yaru-dark
