@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEVICE="AC:BF:71:83:51:BA"
-bt=$(printf '\uf294')
+bt=$(printf '\uf025')  # Font Awesome headphones (Free Solid)
 blue="#7aa2f7"
 disabled="#414868"
 
