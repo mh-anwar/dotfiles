@@ -51,6 +51,7 @@
 window, .background {
     background-color: @window_bg_color;
     color: @window_fg_color;
+    font-size: 10.5pt;
 }
 
 /* Catch-all for top-level app containers only */
@@ -85,6 +86,15 @@ headerbar:backdrop {
 
 headerbar .title {
     font-weight: 600;
+}
+
+headerbar #show_sidebar_button {
+    min-height: 0;
+    min-width: 0;
+    max-height: 28px;
+    padding: 4px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 /* Window controls */

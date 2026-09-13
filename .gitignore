@@ -1,4 +1,5 @@
 /*
+# CLEANUP.md is local-only scratch; excluded by the /* rule above and noted here for clarity
 !.gitignore
 !i3/
 !dunst/

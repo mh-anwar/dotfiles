@@ -27,6 +27,8 @@
     outline-style: none;
     outline-width: 0;
     -gtk-secondary-caret-color: @theme_selected_bg_color;
+    -GtkTreeView-horizontal-separator: 8;
+    -GtkTreeView-expander-size: 16;
 }
 
 *:focus {
@@ -156,7 +158,7 @@ button {
     color: @theme_fg_color;
     border: 1px solid #3a3a3a;
     border-radius: 6px;
-    padding: 4px 10px;
+    padding: 6px 14px;
     min-height: 20px;
     min-width: 16px;
     transition: all 150ms ease;
@@ -330,6 +332,7 @@ toolbar {
 treeview, .view {
     background-color: @theme_base_color;
     color: @theme_fg_color;
+    -GtkTreeView-horizontal-separator: 8;
 }
 
 treeview:selected, .view:selected {
@@ -387,16 +390,41 @@ treeview header button:last-child {
     background-color: rgba(255,255,255,0.04);
 }
 
+placessidebar row > revealer {
+    padding: 0 14px;
+}
+
+placessidebar row image.sidebar-icon:dir(ltr) {
+    padding-right: 8px;
+}
+
+placessidebar row image.sidebar-icon:dir(rtl) {
+    padding-left: 8px;
+}
+
+placessidebar row label.sidebar-label:dir(ltr) {
+    padding-right: 2px;
+}
+
+placessidebar row label.sidebar-label:dir(rtl) {
+    padding-left: 2px;
+}
+
 /* Combo box */
 combobox button {
     border-radius: 6px;
+    padding: 6px 14px;
+}
+
+combobox cellview {
+    margin-right: 4px;
 }
 
 combobox arrow {
     color: @theme_fg_color;
     min-width: 16px;
     min-height: 16px;
-    -gtk-icon-source: builtin;
+    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
 }
 
 /* Arrows and indicators */
@@ -475,6 +503,25 @@ radio:checked {
 check:checked:hover, radio:checked:hover {
     background-image: image(shade(@theme_selected_bg_color, 1.15));
     border-color: shade(@theme_selected_bg_color, 1.15);
+}
+
+checkbutton.text-button, radiobutton.text-button {
+    padding: 2px 0;
+    outline-offset: 0;
+}
+
+checkbutton label, radiobutton label {
+    margin-left: 6px;
+}
+
+checkbutton.text-button label:not(:only-child):first-child,
+radiobutton.text-button label:not(:only-child):first-child {
+    margin-left: 6px;
+}
+
+checkbutton.text-button label:not(:only-child):last-child,
+radiobutton.text-button label:not(:only-child):last-child {
+    margin-right: 4px;
 }
 
 /* Checkbox/radio spacing in menus */
@@ -606,6 +653,39 @@ popover, popover.background {
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     padding: 4px;
+}
+
+/* File chooser */
+filechooser #pathbarbox {
+    border-bottom: 1px solid #2a2a2a;
+}
+
+filechooser treeview {
+    -GtkTreeView-horizontal-separator: 10;
+}
+
+filechooser checkbutton label {
+    margin-left: 6px;
+}
+
+filechooser actionbar {
+    border-top: 1px solid #2a2a2a;
+    padding: 8px 0 8px 12px;
+}
+
+filechooser actionbar combobox {
+    min-width: 273px;
+    margin-right: 6px;
+}
+
+/* Dialog buttons — .dialog-action-area is sibling of filechooser, not inside it */
+dialog .dialog-action-area {
+    padding: 8px 0 8px 12px;
+}
+
+dialog .dialog-action-area button {
+    min-width: 100px;
+    padding: 8px 12px;
 }
 
 /* Dialog */
