@@ -23,12 +23,14 @@ Debug: DASHBOARD_FORCE_VISIBLE=1, DASHBOARD_FAST=1 (short intervals).
 
 import calendar
 import collections
+import ctypes
 import glob
 import itertools
 import json
 import os
 import re
 import shutil
+import signal
 import socket
 import struct
 import subprocess
@@ -59,17 +61,30 @@ EVERY = {"system": 2, "net": 1, "services": 10, "toggles": 5, "agents": 3, "serv
 if FAST:
     EVERY = {k: 0.2 for k in EVERY}
 
-def _local_projects():
-    """Supabase projects for the Dev tab, from projects.json next to this file
-    (kept out of git; see projects.example.json). [(label, cli project id, workdir)]"""
+# Supabase projects are discovered, not configured: every `supabase start`
+# labels its containers with the project id and workdir, and the services
+# poll (already running `docker ps`) reads them. Projects seen once are
+# remembered here so they keep a row (and can be started) after they stop.
+SUPABASE_SEEN = f"{HOME}/.cache/dashboard/supabase-projects.json"
+
+
+def load_seen_projects():
+    """{project id: workdir}, dropping projects whose folder is gone."""
     try:
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "projects.json")) as f:
-            return [(p["label"], p["id"], os.path.expanduser(p["workdir"])) for p in json.load(f)["supabase"]]
-    except (OSError, ValueError, KeyError, TypeError):
-        return []
+        with open(SUPABASE_SEEN) as f:
+            seen = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    return {p: w for p, w in seen.items() if os.path.isfile(f"{w}/supabase/config.toml")}
 
 
-SUPABASE = _local_projects()
+def save_seen_projects(seen):
+    try:
+        os.makedirs(os.path.dirname(SUPABASE_SEEN), exist_ok=True)
+        with open(SUPABASE_SEEN, "w") as f:
+            json.dump(seen, f, indent=1)
+    except OSError:
+        pass
 POSTGRES = [
     (f"Postgres {p.split('/')[-2]}", f"postgresql@{p.split('/')[-2]}-{p.split('/')[-1]}.service")
     for p in sorted(glob.glob("/etc/postgresql/*/*"))
@@ -159,6 +174,13 @@ def spawn(*argv):
 
 def notify(title, body=""):
     spawn("notify-send", "-a", "dashboard", title, body)
+
+
+def die_with_parent():
+    """preexec_fn: the kernel SIGTERMs the child when the dashboard exits, so a
+    restart never orphans `pactl subscribe` (each one holds a PipeWire client
+    slot; ~60 orphans and nothing else can connect)."""
+    ctypes.CDLL("libc.so.6", use_errno=True).prctl(1, signal.SIGTERM)  # PR_SET_PDEATHSIG
 
 
 def later(ms, fn):
@@ -524,11 +546,13 @@ def services_snapshot():
         state[kv.get("Id")] = (kv.get("ActiveState") == "active", int(mem) / MB if mem.isdigit() else 0.0)
     supabase = {}
     if state.get("docker.service", (False,))[0]:
-        out = run("docker", "ps", "--no-trunc", "--format", '{{.ID}}\t{{.Label "com.supabase.cli.project"}}')
+        out = run("docker", "ps", "--no-trunc", "--format",
+                  '{{.ID}}\t{{.Label "com.supabase.cli.project"}}\t{{.Label "com.supabase.cli.workdir"}}')
         for line in out.splitlines():
-            cid, _, proj = line.partition("\t")
+            cid, proj, workdir = (line.split("\t") + ["", ""])[:3]
             if proj:
-                supabase[proj] = supabase.get(proj, 0.0) + container_mb(cid)
+                mb, wd = supabase.get(proj, (0.0, ""))
+                supabase[proj] = (mb + container_mb(cid), wd or workdir)
     return state, supabase
 
 
@@ -1659,16 +1683,11 @@ class Dashboard(Gtk.Window):
             lambda: ok("systemctl", "start", "docker.service"),
             lambda: ok("systemctl", "stop", "docker.service", "docker.socket", "containerd.service"))
         t.pack_start(self.docker_row, False, False, 0)
-        self.supa_rows = {}
-        for name, proj, workdir in SUPABASE:
-            def start(w=workdir):
-                if run("systemctl", "is-active", "docker.service") != "active" \
-                        and not ok("systemctl", "start", "docker.service"):
-                    return False
-                return ok("supabase", "start", "--workdir", w)
-            row = ServiceRow(self, name, start, lambda w=workdir: ok("supabase", "stop", "--workdir", w))
-            self.supa_rows[proj] = row
-            t.pack_start(row, False, False, 0)
+        self.supa_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        t.pack_start(self.supa_box, False, False, 0)
+        self.supa_rows, self.supa_seen = {}, load_seen_projects()
+        for proj in sorted(self.supa_seen):
+            self._add_supa_row(proj)
         self.pg_rows = {}
         for name, unit in POSTGRES:
             row = ServiceRow(self, name, lambda u=unit: ok("systemctl", "start", u),
@@ -1676,6 +1695,22 @@ class Dashboard(Gtk.Window):
             self.pg_rows[unit] = row
             t.pack_start(row, False, False, 0)
         return outer
+
+    def _add_supa_row(self, proj):
+        def start(w=self.supa_seen[proj]):
+            if run("systemctl", "is-active", "docker.service") != "active" \
+                    and not ok("systemctl", "start", "docker.service"):
+                return False
+            return ok("supabase", "start", "--workdir", w)
+        row = ServiceRow(self, f"Supabase · {proj}", start,
+                         lambda w=self.supa_seen[proj]: ok("supabase", "stop", "--workdir", w))
+        row.set_tooltip_text(self.supa_seen[proj])
+        self.supa_rows[proj] = row
+        self.supa_box.pack_start(row, False, False, 0)
+        # keep rows alphabetical
+        for i, p in enumerate(sorted(self.supa_rows)):
+            self.supa_box.reorder_child(self.supa_rows[p], i)
+        row.show_all()
 
     def _show_tab(self, key):
         for k, b in self.tabs.items():
@@ -1715,10 +1750,19 @@ class Dashboard(Gtk.Window):
         c_mb = state.get("containerd.service", (False, 0.0))[1]
         total = d_mb + c_mb if d_on else 0.0
         self.docker_row.update(d_on, human(d_mb + c_mb) if d_on else "off")
+        new = {p: wd for p, (_mb, wd) in supa.items() if wd and self.supa_seen.get(p) != wd}
+        if new:
+            for p, wd in new.items():
+                self.supa_seen[p] = wd
+                if p in self.supa_rows:  # moved folder: rebuild its row
+                    self.supa_rows.pop(p).destroy()
+                self._add_supa_row(p)
+            save_seen_projects(self.supa_seen)
         for proj, row in self.supa_rows.items():
             on = proj in supa
-            row.update(on, human(supa[proj]) if on else ("off" if d_on else "needs Docker"))
-            total += supa.get(proj, 0.0)
+            mb = supa[proj][0] if on else 0.0
+            row.update(on, human(mb) if on else ("off" if d_on else "needs Docker"))
+            total += mb
         for unit, row in self.pg_rows.items():
             on, mb = state.get(unit, (False, 0.0))
             row.update(on, human(mb) if on else "off")
@@ -1785,7 +1829,8 @@ class Dashboard(Gtk.Window):
 
     def _watch_audio(self):
         """Refresh audio only when PipeWire says something changed."""
-        self.pactl = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, bufsize=0)
+        self.pactl = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, bufsize=0,
+                                      preexec_fn=die_with_parent)
         self.pactl_buf = b""
         self.audio_debounce = 0
         GLib.io_add_watch(self.pactl.stdout.fileno(), GLib.PRIORITY_LOW,

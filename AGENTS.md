@@ -28,7 +28,7 @@ Lead with the conclusion. No deep technical explanations unless I ask.
 - Manual lock `$mod+Shift+p`: `i3lock-multimonitor` (clone into `i3/i3lock-multimonitor/`)
 - `osd.sh` — volume/brightness/mic keys; forwards to the dashboard process (D-Bus `dev.dashboard.Osd`), which applies the change and shows the Windows-style bottom-centre popup. Falls back to plain pactl/brightnessctl if the dashboard isn't running
 - `docker-toggle.sh` — helper script
-- Dashboard (`dashboard/`; Supabase projects for its Dev tab go in the git-ignored `dashboard/projects.json`, see `projects.example.json`): full-screen bento grid on workspace 0 (`$mod+``, pinned to eDP). Workspace 0 is dashboard-only: apps opened there get moved to the previous workspace. Holds network, uptime, brightness (moved off polybar)
+- Dashboard (`dashboard/`; Dev tab auto-discovers Supabase projects from container labels, remembered in `~/.cache/dashboard/`): full-screen bento grid on workspace 0 (`$mod+``, pinned to eDP). Workspace 0 is dashboard-only: apps opened there get moved to the previous workspace. Holds network, uptime, brightness (moved off polybar)
 - Notifications: `dunst` (`dunst/dunstrc`) — left-click opens the app; `$mod+n` last notification, `$mod+Shift+n` dismiss all. `focus_on_window_activation focus` so clicks jump to the app's workspace
 - Autostarts: picom, polybar, dunst, nm-applet, blueman, flameshot, copyq, kdeconnect, udiskie, easyeffects, keepassxc, polkit-gnome, firefox, `dashboard/launch.sh`
 

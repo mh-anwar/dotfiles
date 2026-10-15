@@ -1,5 +1,0 @@
-{
-  "supabase": [
-    {"label": "Supabase · my-app", "id": "my_app", "workdir": "~/Code/my-app"}
-  ]
-}

@@ -15,5 +15,6 @@
 !picom/
 !kitty/
 !dashboard/
-dashboard/projects.json
 dashboard/__pycache__/
+!gtk-4.0/
+gtk-3.0/bookmarks

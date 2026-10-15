@@ -1,0 +1,65 @@
+/* Graphite dark — colours only, on top of stock libadwaita.
+ * Don't restyle widgets here: overriding libadwaita's widget CSS is what
+ * made the old TrueBlack theme inconsistent. The same palette is in
+ * gtk-3.0/gtk.css (adw-gtk3-dark), the dashboard, dunst and polybar.
+ */
+
+@define-color accent_color #8ab4f8;
+@define-color accent_bg_color #4f86e8;
+@define-color accent_fg_color #ffffff;
+
+@define-color window_bg_color #1c1c1f;
+@define-color window_fg_color #ececef;
+@define-color view_bg_color #18181b;
+@define-color view_fg_color #ececef;
+@define-color headerbar_bg_color #232327;
+@define-color headerbar_fg_color #ececef;
+@define-color headerbar_backdrop_color #1c1c1f;
+@define-color sidebar_bg_color #202024;
+@define-color sidebar_fg_color #ececef;
+@define-color sidebar_backdrop_color #1c1c1f;
+@define-color secondary_sidebar_bg_color #1c1c1f;
+@define-color card_bg_color #232327;
+@define-color card_fg_color #ececef;
+@define-color dialog_bg_color #232327;
+@define-color dialog_fg_color #ececef;
+@define-color popover_bg_color #26262b;
+@define-color popover_fg_color #ececef;
+
+@define-color destructive_color #f47174;
+@define-color destructive_bg_color #c9464a;
+@define-color success_color #6fdc9b;
+@define-color success_bg_color #2f9e62;
+@define-color warning_color #f4b860;
+@define-color warning_bg_color #c98a2e;
+@define-color error_color #f47174;
+@define-color error_bg_color #c9464a;
+
+/* ── Polish (spacing and emphasis; libadwaita widgets untouched) ───── */
+
+/* Header bars: room between buttons, consistent button size */
+headerbar { padding: 4px 8px; }
+headerbar box.start, headerbar box.end { border-spacing: 6px; }
+headerbar button, headerbar menubutton > button { min-height: 32px; min-width: 32px; }
+headerbar .linked > button { margin: 0; }
+
+/* Files: path bar as a clear field, breadcrumbs with breathing room */
+.nautilus-pathbar { min-height: 34px; border-radius: 10px; margin: 0 4px; }
+.nautilus-path-button { margin: 3px 2px; padding: 0 10px; }
+.nautilus-path-button.current-dir label { font-weight: 700; }
+
+/* Sidebars (Files places, Settings, …): comfortable rows, accent-tinted active one */
+.navigation-sidebar { padding: 8px 6px; }
+.navigation-sidebar > row { min-height: 36px; padding: 0 12px; margin: 1px 6px; border-radius: 8px; }
+.navigation-sidebar > row image { margin-right: 6px; }
+.navigation-sidebar > separator { margin: 10px 14px; }
+.navigation-sidebar > row:selected { background-color: alpha(@accent_bg_color, 0.22); }
+.navigation-sidebar > row:selected label, .navigation-sidebar > row:selected image { color: @accent_color; }
+
+/* Tabs */
+tabbar tab { min-height: 34px; border-radius: 8px; margin: 0 2px; }
+
+/* List views (Files list, file chooser): accent-tinted hover/selection */
+columnview > listview > row { border-radius: 8px; }
+columnview > listview > row:hover { background-color: alpha(@accent_color, 0.07); }
+columnview > listview > row:selected { background-color: alpha(@accent_bg_color, 0.30); }
