@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Volume/brightness/mic keys.  osd.sh vol-up|vol-down|mute|mic-mute|bright-up|bright-down
 #
-# Normally forwards the key to the dashboard process (dev.mohammad.Osd), which
+# Normally forwards the key to the dashboard process (dev.dashboard.Osd), which
 # applies it and shows the Windows-style popup. Key repeat can't queue up
 # there. If the dashboard isn't running, apply the change here instead.
 
-gdbus call --session --dest dev.mohammad.Osd --object-path /dev/mohammad/Osd \
-    --method dev.mohammad.Osd.Key "$1" >/dev/null 2>&1 && exit 0
+gdbus call --session --dest dev.dashboard.Osd --object-path /dev/dashboard/Osd \
+    --method dev.dashboard.Osd.Key "$1" >/dev/null 2>&1 && exit 0
 
 # Fallback: drop presses that arrive while one is still running.
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/osd.lock"

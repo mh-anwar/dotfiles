@@ -1,6 +1,6 @@
 # Dotfiles - i3 Desktop Environment
 
-`~/.config` dotfiles for an i3wm desktop on Ubuntu/Debian. Only these are tracked in git: `i3`, `polybar`, `dunst`, `picom`, `rofi`, `kitty`, `nvim`, `gtk-3.0`, `themes/TrueBlack`, `flameshot`, `lyrebird`, `pavucontrol.ini`. Everything else in `~/.config` is app state — ignore it.
+`~/.config` dotfiles for an i3wm desktop on Ubuntu/Debian. Only these are tracked in git: `i3`, `dashboard`, `polybar`, `dunst`, `picom`, `rofi`, `kitty`, `nvim`, `gtk-3.0`, `themes/TrueBlack`, `flameshot`, `lyrebird`, `pavucontrol.ini`. Everything else in `~/.config` is app state — ignore it.
 
 ## How to Work With Me
 
@@ -26,11 +26,11 @@ Lead with the conclusion. No deep technical explanations unless I ask.
 - `monitors.sh` — xrandr layout: laptop (eDP) + DisplayPort-0 + HDMI-A-0, all 1080p
 - Idle lock: `xss-lock` → `lock-if-idle.sh` (skips if audio playing or fullscreen) → `betterlockscreen`
 - Manual lock `$mod+Shift+p`: `i3lock-multimonitor` (clone into `i3/i3lock-multimonitor/`)
-- `osd.sh` — volume/brightness/mic keys; forwards to the dashboard process (D-Bus `dev.mohammad.Osd`), which applies the change and shows the Windows-style bottom-centre popup. Falls back to plain pactl/brightnessctl if the dashboard isn't running
+- `osd.sh` — volume/brightness/mic keys; forwards to the dashboard process (D-Bus `dev.dashboard.Osd`), which applies the change and shows the Windows-style bottom-centre popup. Falls back to plain pactl/brightnessctl if the dashboard isn't running
 - `docker-toggle.sh` — helper script
-- Dashboard (`~/.config/dashboard/`, not in this repo): full-screen bento grid on workspace 0 (`$mod+``, pinned to eDP). Workspace 0 is dashboard-only: apps opened there get moved to the previous workspace. Holds network, uptime, brightness (moved off polybar)
+- Dashboard (`dashboard/`; Supabase projects for its Dev tab go in the git-ignored `dashboard/projects.json`, see `projects.example.json`): full-screen bento grid on workspace 0 (`$mod+``, pinned to eDP). Workspace 0 is dashboard-only: apps opened there get moved to the previous workspace. Holds network, uptime, brightness (moved off polybar)
 - Notifications: `dunst` (`dunst/dunstrc`) — left-click opens the app; `$mod+n` last notification, `$mod+Shift+n` dismiss all. `focus_on_window_activation focus` so clicks jump to the app's workspace
-- Autostarts: picom, polybar, dunst, nm-applet, blueman, flameshot, copyq, kdeconnect, udiskie, easyeffects, keepassxc, polkit-gnome, firefox, `~/.config/dashboard/launch.sh` (not in this repo)
+- Autostarts: picom, polybar, dunst, nm-applet, blueman, flameshot, copyq, kdeconnect, udiskie, easyeffects, keepassxc, polkit-gnome, firefox, `dashboard/launch.sh`
 
 ### Polybar (`polybar/`)
 - Bar `the_one_bar`, launched on every monitor by `launch.sh`

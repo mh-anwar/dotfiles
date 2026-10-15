@@ -1,0 +1,153 @@
+/* Bento dashboard + OSD — graphite dark (neutral greys, soft blue accent).
+ * Rounded: tiles/OSD 14px (RADIUS in dashboard.py), controls 8–12px.
+ * Text: Inter · Numbers: JetBrains Mono · Icons: JetBrainsMono Nerd Font
+ */
+
+* {
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: #ececef;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
+    background-image: none;
+}
+
+/* The GTK theme paints every container; clear it. Class rules below win. */
+window, box, grid, label, overlay, scale, scale * { background-color: transparent; }
+
+/* ── tiles ───────────────────────────────────────────────────────── */
+.tile { background-color: #18181b; padding: 24px 26px; border-radius: 14px; }
+.tile-head { margin-bottom: 18px; }
+/* one-row tiles (network, agents) */
+.tile.compact { padding: 16px 26px 14px 26px; }
+.compact .tile-head { margin-bottom: 6px; }
+.compact button.row { padding: 5px 10px; }
+.tile-title { font-size: 13px; font-weight: 600; letter-spacing: 2px; color: #8ab4f8; }
+.sub  { font-size: 13px; color: #8b8b94; }
+.num  { font-family: "JetBrains Mono"; font-size: 14px; color: #c4c4cc; }
+/* SVG symbolic icons take their colour from `color` */
+.glyph { color: #f4b860; }
+.field { font-size: 12px; font-weight: 600; letter-spacing: 1px; color: #8b8b94; margin: 4px 0 6px 0; }
+
+/* art tile: wallpaper with a solid caption strip */
+.caption { background-color: #18181b; padding: 12px 20px; margin: 16px; border-radius: 10px; }
+.host { font-size: 18px; font-weight: 600; }
+.caption-sub { font-size: 14px; color: #8b8b94; }
+
+/* clock */
+.clock {
+    font-family: "Inter";
+    font-weight: 200;
+    font-size: 120px;
+    font-feature-settings: "tnum";
+    letter-spacing: -4px;
+    margin: -14px 0 -10px -4px;
+}
+.date { font-size: 20px; font-weight: 500; color: #8ab4f8; }
+.week { margin-top: 10px; }
+.wcell { padding: 10px 0; border-radius: 10px; margin: 0 3px; }
+.wdow { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: #8b8b94; }
+.wday { font-family: "JetBrains Mono"; font-size: 16px; }
+.wcell.past .wday { color: #52525b; }
+.wcell.today { background-color: #8ab4f8; }
+.wcell.today label { color: #18181b; font-weight: 700; }
+
+/* meters */
+.meter-name { font-size: 13px; color: #c4c4cc; }
+
+/* network */
+.ssid { font-size: 22px; font-weight: 600; }
+.rate { font-family: "JetBrains Mono"; font-size: 24px; font-weight: 300; min-width: 64px; }
+.rate-down { color: #6fdc9b; }
+.rate-up { color: #8ab4f8; }
+.unit { font-size: 12px; color: #8b8b94; }
+button.link { padding: 2px 8px; border-radius: 6px; }
+button.link label { font-size: 13px; color: #8b8b94; }
+button.link:hover label { color: #ececef; }
+
+/* rows: status light · name · value */
+button.row { padding: 9px 10px; margin: 0 -10px; border-radius: 8px; transition: background-color 120ms ease-out; }
+button.row:hover  { background-color: #232327; }
+button.row:active { background-color: #2e2e33; }
+.row-name { font-size: 15px; }
+.dot { min-width: 10px; min-height: 10px; background-color: #2e2e33; border-radius: 5px; }
+.dot.on    { background-color: #6fdc9b; }
+.dot.alert { background-color: #f47174; }
+.dot.busy  { animation: pulse 700ms ease-in-out infinite alternate; }
+@keyframes pulse { from { background-color: #f4b860; } to { background-color: #2e2e33; } }
+.dot.work  { animation: pulse-work 900ms ease-in-out infinite alternate; }
+@keyframes pulse-work { from { background-color: #6fdc9b; } to { background-color: #2e2e33; } }
+
+/* audio pickers */
+/* audio device chips (output / microphone) */
+.chips { margin-bottom: 14px; }
+.chips flowboxchild { padding: 0; }
+button.chip { background-color: #232327; padding: 7px 14px; border-radius: 16px; transition: background-color 120ms ease-out; }
+button.chip label { font-size: 14px; color: #c4c4cc; }
+button.chip:hover { background-color: #2e2e33; }
+button.chip.active { background-color: #8ab4f8; }
+button.chip.active label { color: #18181b; font-weight: 600; }
+
+/* brightness slider */
+.bright-line { margin-bottom: 16px; }
+scale { padding: 8px 0; }
+scale trough { background-color: #2e2e33; min-height: 6px; border-radius: 3px; }
+scale highlight { background-color: #f4b860; min-height: 6px; border-radius: 3px; }
+scale slider { background-color: #ececef; min-width: 18px; min-height: 18px; margin: -6px; border-radius: 9px; }
+scale slider:hover { background-color: #ffffff; }
+
+/* quick toggle tiles */
+.toggles { margin-bottom: 14px; }
+button.toggle { background-color: #232327; padding: 14px 14px 12px 14px; border-radius: 12px; transition: background-color 120ms ease-out; }
+button.toggle:hover { background-color: #2e2e33; }
+button.toggle.on { background-color: #8ab4f8; }
+button.toggle.on label, button.toggle.on image { color: #18181b; }
+button.toggle.busy { animation: pulse-tile 700ms ease-in-out infinite alternate; }
+@keyframes pulse-tile { from { background-color: #3f3f46; } to { background-color: #232327; } }
+.toggle-glyph { color: #ececef; }
+.toggle-name { font-size: 14px; font-weight: 600; }
+.toggle-state { font-size: 12px; color: #8b8b94; }
+button.toggle.on .toggle-state { color: #18181b; }
+
+/* power profile */
+.segmented { background-color: #232327; border-radius: 10px; padding: 3px; }
+button.seg { padding: 6px 0; border-radius: 8px; transition: background-color 120ms ease-out; }
+button.seg label { font-size: 13px; color: #8b8b94; }
+button.seg:hover { background-color: #2e2e33; }
+button.seg.active { background-color: #8ab4f8; }
+button.seg.active label { color: #18181b; font-weight: 600; }
+
+/* ── OSD (Windows-style, bottom centre) ──────────────────────────── */
+window.osd { background-color: transparent; }  /* body is painted rounded in Osd._paint_body */
+.osd-box { padding: 0 22px; }
+.osd-glyph { color: #ececef; }
+.osd-value { font-family: "JetBrains Mono"; font-size: 16px; }
+.osd-text { font-size: 15px; font-weight: 500; }
+window.osd.alert label { color: #18181b; }
+
+/* Dashboard covered by windows: no animations (see set_visible_state). */
+.paused .dot.work, .paused .dot.busy, .paused button.toggle.busy { animation: none; }
+
+/* ✕ stop buttons on agent/server rows: first click arms (red), second stops */
+button.kill { padding: 4px; border-radius: 6px; min-width: 0; min-height: 0; transition: background-color 120ms ease-out; }
+button.kill image { color: #8b8b94; }
+button.kill:hover { background-color: #2e2e33; }
+button.kill:hover image { color: #ececef; }
+button.kill.armed { background-color: #f47174; }
+button.kill.armed image { color: #18181b; }
+button.kill.armed { padding: 4px 10px; }
+.kill-label { font-size: 12px; font-weight: 700; color: #18181b; }
+/* Wi-Fi tile waiting for the confirming second click */
+button.toggle.armed, button.toggle.on.armed { background-color: #f47174; }
+button.toggle.armed label, button.toggle.armed image { color: #18181b; }
+
+/* ── tabs in a tile header (Dev services | Top memory) ───────────── */
+button.tab { padding: 2px 10px; margin-right: 6px; border-radius: 6px; min-height: 0; transition: background-color 120ms ease-out; }
+button.tab label { font-size: 13px; font-weight: 600; letter-spacing: 2px; color: #5c5c66; }
+button.tab:first-child { margin-left: -10px; }
+button.tab:hover { background-color: #232327; }
+button.tab:hover label { color: #c4c4cc; }
+button.tab.active label { color: #8ab4f8; }
+.tab-stack { margin: 0 -10px; }
