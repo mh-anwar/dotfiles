@@ -7,11 +7,11 @@ set -euo pipefail
 theme="$HOME/.config/rofi/launchers/type-6/style-1-dune.rasi"
 wallpapers=(
     "$HOME/.config/i3/oldworm.jpg"
-    "$HOME/Downloads/wp1817964-interstellar-wallpapers.jpg"
-    "$HOME/Downloads/wp7178281.jpg"
-    "$HOME/Downloads/wp2577050-sharingan-wallpaper-hd.jpg"
-    "$HOME/Downloads/wp10466255-interstellar-4k-wallpapers.jpg"
-    "$HOME/Downloads/heic1509a.jpg"
+    "$HOME/.config/rofi/wallpapers/wp1817964-interstellar-wallpapers.jpg"
+    "$HOME/.config/rofi/wallpapers/wp7178281.jpg"
+    "$HOME/.config/rofi/wallpapers/wp2577050-sharingan-wallpaper-hd.jpg"
+    "$HOME/.config/rofi/wallpapers/wp10466255-interstellar-4k-wallpapers.jpg"
+    "$HOME/.config/rofi/wallpapers/heic1509a.jpg"
 )
 wallpaper="${wallpapers[RANDOM % ${#wallpapers[@]}]}"
 

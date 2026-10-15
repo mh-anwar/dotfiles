@@ -12,7 +12,9 @@ gdbus call --session --dest dev.mohammad.Osd --object-path /dev/mohammad/Osd \
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/osd.lock"
 flock -n 9 || exit 0
 case "$1" in
-    vol-up)      pactl set-sink-mute @DEFAULT_SINK@ 0; pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
+    vol-up)      pactl set-sink-mute @DEFAULT_SINK@ 0
+                 cur=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP "\d+(?=%)" | head -1)
+                 pactl set-sink-volume @DEFAULT_SINK@ "$(( cur + 5 > 153 ? 153 : cur + 5 ))%" ;;
     vol-down)    pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
     mute)        pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
     mic-mute)    pactl set-source-mute @DEFAULT_SOURCE@ toggle ;;
