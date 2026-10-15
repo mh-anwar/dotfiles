@@ -176,11 +176,16 @@ def notify(title, body=""):
     spawn("notify-send", "-a", "dashboard", title, body)
 
 
+_prctl = ctypes.CDLL("libc.so.6", use_errno=True).prctl  # loaded here, never in a forked child
+
+
 def die_with_parent():
     """preexec_fn: the kernel SIGTERMs the child when the dashboard exits, so a
     restart never orphans `pactl subscribe` (each one holds a PipeWire client
-    slot; ~60 orphans and nothing else can connect)."""
-    ctypes.CDLL("libc.so.6", use_errno=True).prctl(1, signal.SIGTERM)  # PR_SET_PDEATHSIG
+    slot; ~60 orphans and nothing else can connect). Must only be used for
+    children started from the main thread: the signal fires when the forking
+    *thread* exits."""
+    _prctl(1, signal.SIGTERM)  # PR_SET_PDEATHSIG
 
 
 def later(ms, fn):
@@ -589,7 +594,7 @@ def memory_hogs(n=5):
     read it (shared pages split fairly, so groups aren't double-counted), RSS
     for other users' processes."""
     apps, pids, me = collections.Counter(), collections.defaultdict(list), os.getpid()
-    for pid, (comm, _ppid, _cpu, _start, rss) in read_procs().items():
+    for pid, (comm, _ppid, _cpu, start, rss) in read_procs().items():
         if not rss or pid == me:
             continue  # kernel threads
         try:
@@ -607,7 +612,7 @@ def memory_hogs(n=5):
         except (OSError, StopIteration, ValueError):
             pass
         apps[name] += rss
-        pids[name].append(pid)
+        pids[name].append((pid, start))
     return [(name, b / MB, pids[name]) for name, b in apps.most_common(n)]
 
 
@@ -657,7 +662,7 @@ class AgentWatch:
                 cwd = os.readlink(f"/proc/{pid}/cwd")
             except OSError:
                 cwd = ""
-            found.append({"pid": pid, "name": AGENTS[comm], "cwd": cwd, "project": project_name(cwd),
+            found.append({"pid": pid, "start": start, "name": AGENTS[comm], "cwd": cwd, "project": project_name(cwd),
                           "age": up - start / HZ, "mb": sum(procs[q][4] for q in tree) / MB, "busy": busy})
         self.prev, self.prev_t = ticks_now, now
         # Stable order (oldest first) so rows aren't rebuilt when busy/idle flips.
@@ -726,7 +731,8 @@ def servers_snapshot():
             continue
         comm = procs.get(pid, ("?",))[0]
         kind = next((k for key, k in SERVER_KINDS if key in cmd.lower()), comm.split(" ")[0].capitalize())
-        out.append({"pid": pid, "name": kind, "project": project_name(cwd), "cwd": cwd, "cmd": cmd.strip(),
+        out.append({"pid": pid, "start": procs[pid][3] if pid in procs else -1,
+                    "name": kind, "project": project_name(cwd), "cwd": cwd, "cmd": cmd.strip(),
                     "ports": sorted(ports), "age": up - procs[pid][3] / HZ if pid in procs else 0,
                     "mb": procs[pid][4] / MB if pid in procs else 0})
     return sorted(out, key=lambda s: s["ports"][0])
@@ -753,6 +759,22 @@ def stop_tree(pid, walk_up=True):
         tree.append(q)
         stack.extend(kids.get(q, []))
     return kill_all(tree)
+
+
+def same_process(pid, start):
+    """True if pid is still the process that started at `start` (clock ticks)."""
+    try:
+        with open(f"/proc/{pid}/stat") as f:
+            s = f.read()
+        return int(s[s.rindex(")") + 2:].split()[19]) == start
+    except (OSError, ValueError, IndexError):
+        return False
+
+
+def kill_procs(procs):
+    """kill_all for [(pid, start ticks)] taken earlier: skips pids that exited
+    and were reused by an unrelated process in the meantime."""
+    return kill_all([pid for pid, start in procs if same_process(pid, start)])
 
 
 def kill_all(tree):
@@ -1559,7 +1581,7 @@ class Dashboard(Gtk.Window):
                 row = KillRow(f"{a['name']}  ·  {a['project']}",
                               lambda pid=a["pid"], n=a["name"]: Job(lambda: focus_agent(pid), lambda found, n=n: None if found else notify(
                                   f"{n} has no window", "Its terminal was closed. Use ✕ to stop it.")).kick(),
-                              lambda pid=a["pid"]: Job(lambda: stop_tree(pid, walk_up=False),
+                              lambda pid=a["pid"], st=a["start"]: Job(lambda: same_process(pid, st) and stop_tree(pid, walk_up=False),
                                                        lambda _r: self.agents_job.kick()).kick())
                 row.set_tooltip_text(a["cwd"])
                 self.agent_rows[a["pid"]] = row
@@ -1599,7 +1621,7 @@ class Dashboard(Gtk.Window):
                 url = f"http://localhost:{s['ports'][0]}"
                 row = KillRow(f"{s['name']}  ·  {s['project']}",
                               lambda u=url: spawn("xdg-open", u),
-                              lambda pid=s["pid"]: Job(lambda: stop_tree(pid),
+                              lambda pid=s["pid"], st=s["start"]: Job(lambda: same_process(pid, st) and stop_tree(pid),
                                                        lambda _r: self.servers_job.kick()).kick())
                 row.set_tooltip_text(f"{url}\n{s['cmd'][:120]}")
                 self.server_rows[s["pid"]] = row
@@ -1742,7 +1764,7 @@ class Dashboard(Gtk.Window):
 
     def _kill_hog(self, name):
         pids = self.hog_pids.get(name, [])
-        Job(lambda: kill_all(pids), lambda _r: self.hogs_job.kick()).kick()
+        Job(lambda: kill_procs(pids), lambda _r: self.hogs_job.kick()).kick()
 
     def _apply_services(self, snap):
         state, supa = snap
