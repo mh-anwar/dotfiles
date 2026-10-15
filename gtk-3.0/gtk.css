@@ -1,42 +1,36 @@
+/* Graphite dark — colours only, on top of adw-gtk3-dark (libadwaita look for GTK3 apps).
+ * Don't restyle widgets here: overriding libadwaita's widget CSS is what
+ * made the old TrueBlack theme inconsistent. The same palette is in
+ * gtk-4.0/gtk.css (libadwaita), the dashboard, dunst and polybar.
+ */
 
-/* Main Notification Window */
-#XfceNotifyWindow {
-    background-color: rgba(26, 27, 38, 0.95); /* Deep charcoal with slight transparency */
-    border: 1.5px solid #414868;               /* Subtle bluish-grey border */
-    border-radius: 10px;                     /* Clean rounded corners */
-    padding: 8px;
-}
+@define-color accent_color #8ab4f8;
+@define-color accent_bg_color #4f86e8;
+@define-color accent_fg_color #ffffff;
 
-/* Title Text (Summary) */
-#XfceNotifyWindow label#summary {
-    font-weight: 700;
-    font-size: 14px;
-    color: #7aa2f7;  /* Soft blue accent */
-    margin-bottom: 2px;
-}
+@define-color window_bg_color #1c1c1f;
+@define-color window_fg_color #ececef;
+@define-color view_bg_color #18181b;
+@define-color view_fg_color #ececef;
+@define-color headerbar_bg_color #232327;
+@define-color headerbar_fg_color #ececef;
+@define-color headerbar_backdrop_color #1c1c1f;
+@define-color sidebar_bg_color #202024;
+@define-color sidebar_fg_color #ececef;
+@define-color sidebar_backdrop_color #1c1c1f;
+@define-color secondary_sidebar_bg_color #1c1c1f;
+@define-color card_bg_color #232327;
+@define-color card_fg_color #ececef;
+@define-color dialog_bg_color #232327;
+@define-color dialog_fg_color #ececef;
+@define-color popover_bg_color #26262b;
+@define-color popover_fg_color #ececef;
 
-/* Body Text */
-#XfceNotifyWindow label#body {
-    font-size: 13px;
-    color: #c0caf5;  /* Off-white for readability */
-}
-
-/* Icon Styling */
-#XfceNotifyWindow image {
-    margin-right: 12px;
-}
-
-/* Action Buttons (if the notification has them) */
-#XfceNotifyWindow button {
-    background-color: #24283b;
-    border: 1px solid #414868;
-    border-radius: 6px;
-    color: #a9b1d6;
-    padding: 4px 8px;
-    margin-top: 6px;
-}
-
-#XfceNotifyWindow button:hover {
-    background-color: #414868;
-    color: #ffffff;
-}
+@define-color destructive_color #f47174;
+@define-color destructive_bg_color #c9464a;
+@define-color success_color #6fdc9b;
+@define-color success_bg_color #2f9e62;
+@define-color warning_color #f4b860;
+@define-color warning_bg_color #c98a2e;
+@define-color error_color #f47174;
+@define-color error_bg_color #c9464a;

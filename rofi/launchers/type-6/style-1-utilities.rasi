@@ -1,0 +1,8 @@
+/* Compact everyday launcher with descriptions reserved for utility apps. */
+@import "style-1-dune.rasi"
+
+configuration {
+    display-drun: "UTILITIES";
+    drun-categories: "Utility,Graphics,AudioVideo,Office,Development";
+    drun-display-format: "{name}\n<span weight='light' size='small'><i>{comment}</i></span>";
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Pick one Rofi-only background when the launcher opens.  Nothing remains
+# running after Rofi closes.
+
+set -euo pipefail
+
+theme="$HOME/.config/rofi/launchers/type-6/style-1-dune.rasi"
+wallpapers=(
+    "$HOME/.config/i3/oldworm.jpg"
+    "$HOME/Downloads/wp1817964-interstellar-wallpapers.jpg"
+    "$HOME/Downloads/wp7178281.jpg"
+    "$HOME/Downloads/wp2577050-sharingan-wallpaper-hd.jpg"
+    "$HOME/Downloads/wp10466255-interstellar-4k-wallpapers.jpg"
+    "$HOME/Downloads/heic1509a.jpg"
+)
+wallpaper="${wallpapers[RANDOM % ${#wallpapers[@]}]}"
+
+exec rofi -show-icons -show drun -theme "$theme" \
+    -theme-str "window { background-image: url(\"${wallpaper}\", width); }"

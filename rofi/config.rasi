@@ -125,7 +125,11 @@ configuration {
 	kb-accept-custom-alt: "Control+Shift+Return";
 	kb-accept-alt: "Shift+Return";
 	kb-delete-entry: "Shift+Delete";
-	kb-mode-next: "Shift+Right,Control+Tab";
+	/* Tab moves through entries; Shift+Tab changes Apps / Utilities / Clipboard. */
+	kb-element-next: "Tab";
+	kb-element-prev: "";
+	/* Move between the Apps / Utilities / Clipboard tabs. */
+	kb-mode-next: "Shift+Tab,ISO_Left_Tab,Shift+Right,Control+Tab";
 	kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
 	kb-mode-complete: "Control+l";
 	kb-row-left: "Control+Page_Up";

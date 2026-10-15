@@ -9,13 +9,23 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,run,filebrowser,window";
+	modi:                       "drun,utilities:/home/mohammad/.config/rofi/scripts/utilities.sh,clipboard:/home/mohammad/.config/rofi/scripts/clipboard.sh";
     show-icons:                 true;
     display-drun:               "APPS";
-    display-run:                "RUN";
-    display-filebrowser:        "FILES";
-    display-window:             "WINDOW";
+	display-utilities:          "UTILITIES";
+	display-clipboard:          "CLIPBOARD";
 	drun-display-format:        "{name}";
+	/* Tab moves through entries; Shift+Tab changes launcher modes. */
+	kb-element-next:             "Tab";
+	kb-element-prev:             "";
+	kb-secondary-copy:            "";
+	/* Keep mode navigation available in this launcher itself. */
+	kb-mode-next:                "Shift+Tab,ISO_Left_Tab,Shift+Right,Control+Tab";
+	kb-mode-previous:            "Shift+Left,Control+ISO_Left_Tab";
+	/* Clipboard script uses this to copy the highlighted history item. */
+	kb-custom-1:                 "Control+c";
+	/* X11 reports Ctrl+Shift+C as the uppercase keysym Control+C. */
+	kb-custom-2:                 "Control+C";
 	window-format:              "{w} · {c} · {t}";
 }
 
@@ -144,6 +154,7 @@ listview {
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
+    children:                    [ "element-icon", "element-text" ];
     spacing:                     15px;
     padding:                     8px;
     border-radius:               10px;
@@ -176,6 +187,8 @@ element selected.active {
     text-color:                  @foreground;
 }
 element-icon {
+	/* Rofi 2 requires the icon widget to be enabled explicitly. */
+    enabled:                     true;
     background-color:            transparent;
     text-color:                  inherit;
     size:                        32px;

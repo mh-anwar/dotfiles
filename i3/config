@@ -4,10 +4,24 @@ font pango:monospace 11
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# osd.sh runs the change and shows a popup with the new level
+bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/osd.sh vol-up
+bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/osd.sh vol-down
+bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/osd.sh mute
+bindsym XF86AudioMicMute exec --no-startup-id $HOME/.config/i3/osd.sh mic-mute
+
+# Media keys (Firefox, Spotify, etc.)
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+# Notifications: bring back the last one / dismiss all
+bindsym $mod+n exec --no-startup-id dunstctl history-pop
+bindsym $mod+Shift+n exec --no-startup-id dunstctl close-all
+
+# Pick audio output / microphone
+bindsym $mod+o exec --no-startup-id $HOME/.config/rofi/scripts/audio-switch.sh
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -19,10 +33,13 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill
 
 # start rofi instead of dmenu for program launching
-#bindsym $mod+d exec --no-startup-id $HOME/.config/rofi/scripts/launcher_t6
-bindsym $mod+d exec --no-startup-id rofi -show drun -theme $HOME/.config/rofi/launchers/type-6/style-1-dune.rasi
+bindsym $mod+d exec --no-startup-id $HOME/.config/rofi/scripts/launcher_dune_random
 
 focus_follows_mouse no
+
+# When an app asks to be brought forward (e.g. you clicked its notification),
+# switch to it even if it's on another workspace. Default only marks it urgent.
+focus_on_window_activation focus
 
 # change focus
 bindsym $mod+j focus left
@@ -96,6 +113,9 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
+# $mod+` = workspace 0, the dashboard (~/.config/dashboard). Apps opened there
+# are moved back to the previous workspace, so there is no "move to 0" binding.
+bindsym $mod+grave workspace number 0
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -150,7 +170,6 @@ for_window [class=".*"] border pixel 0
 bindsym $mod+minus move scratchpad
 bindsym $mod+equal scratchpad show
 for_window [instance="scratchpad"] floating enable, resize set 1200 700, move position center
-bindsym $mod+grave exec --no-startup-id kitty --name scratchpad
 
 # Float utility windows — use `xprop` to find class, instance, title, etc.
 for_window [class="Pavucontrol"] floating enable, resize set 800 500
@@ -172,7 +191,7 @@ exec_always --no-startup-id picom --config $HOME/.config/picom/picom.conf -b
 #exec --no-startup-id feh --bg-scale $HOME/.config/i3/blackhole.jpg $HOME/.config/i3/dune2.jpg $HOME/.config/i3/stormLookout.jpg # Feh for wallpaper management
 exec --no-startup-id feh --bg-scale $HOME/.config/i3/stormtrooperblue.jpg $HOME/.config/i3/lockscreen.png $HOME/.config/i3/oldworm.jpg
 exec --no-startup-id nm-applet # Network manager applet
-exec_always --no-startup-id xfce-notifyd
+exec --no-startup-id dunst # Notifications (config: ~/.config/dunst/dunstrc)
 
 exec_always --no-startup-id $HOME/.config/i3/monitors.sh
 
@@ -182,6 +201,14 @@ exec --no-startup-id flameshot # Screenshot tool
 exec --no-startup-id kdeconnect-indicator # KDE Connect to phone applet
 exec --no-startup-id copyq # Clipboard manager
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/dashboard/launch.sh # Desktop dashboard on the laptop screen
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 # Password prompts for GUI apps
+exec --no-startup-id udiskie --automount --notify --smart-tray # Auto-mount USB drives
+exec --no-startup-id easyeffects --gapplication-service # Mic cleanup / speaker EQ
+# Lock after 10 min idle, unless audio is playing or a window is fullscreen.
+# Lock-on-suspend is handled by the betterlockscreen@ system service.
+exec --no-startup-id xset s 600 600
+exec --no-startup-id xss-lock --ignore-sleep -- $HOME/.config/i3/lock-if-idle.sh
 exec keepassxc
 # Keybindings to execute screenshot
 bindsym --release Print exec flameshot gui
@@ -190,9 +217,10 @@ bindsym shift+Print exec flameshot gui
 # Lock screen binding
 bindsym $mod+shift+p exec $HOME/.config/i3/i3lock-multimonitor/lock -i "$HOME/.config/i3/storm.jpg"
 
-# Brightness keys fix
-bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
-bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+# Brightness keys
+# The explicit device avoids accidentally changing a keyboard LED.
+bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/.config/i3/osd.sh bright-up
+bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.config/i3/osd.sh bright-down
 
 # Enable tap to click
 exec --no-startup-id xinput set-prop "DELL0A78:00 04F3:3147 Touchpad" "libinput Tapping Enabled" 1
@@ -201,6 +229,10 @@ exec --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Tappin
 # Toggle Docker on/off
 bindsym $mod+Ctrl+d exec --no-startup-id $HOME/.config/i3/docker-toggle.sh
 
+workspace 0 output eDP
+# The dashboard is a real window living on workspace 0, which keeps 0 open.
+assign [class="^Dashboard$"] number 0
+no_focus [class="^Dashboard$"]
 workspace 1 output eDP
 workspace 2 output DisplayPort-0
 workspace 3 output HDMI-A-0

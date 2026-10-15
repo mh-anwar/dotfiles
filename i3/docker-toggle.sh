@@ -1,8 +1,10 @@
 #!/bin/bash
+# start/stop are allowed without a password by
+# /etc/polkit-1/rules.d/50-mohammad-dev-services.rules
 if systemctl is-active --quiet docker; then
-    sudo systemctl stop docker docker.socket containerd
+    systemctl stop docker docker.socket containerd
     notify-send "Docker" "Stopped"
 else
-    sudo systemctl start docker
+    systemctl start docker
     notify-send "Docker" "Started"
 fi
