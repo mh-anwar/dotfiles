@@ -1,0 +1,84 @@
+# Graphite dark, matching polybar and the dashboard.
+#   Left click   open the app (runs its default action)
+#   Right click  menu of the notification's buttons (rofi)
+#   Middle click dismiss
+#   Super+N      bring back the last notification
+#   Super+Shift+N  dismiss all
+
+[global]
+    follow = keyboard
+    origin = top-right
+    offset = (16, 16)
+    width = (300, 420)
+    height = (0, 300)
+    notification_limit = 5
+    indicate_hidden = yes
+
+    font = JetBrainsMono Nerd Font 10
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    word_wrap = yes
+    ellipsize = end
+    show_age_threshold = 60
+    show_indicators = yes
+
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 12
+    gap_size = 8
+    frame_width = 1
+    frame_color = "#4a4a52"
+    separator_color = frame
+    corner_radius = 6
+
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 48
+    icon_theme = Adwaita
+    enable_recursive_icon_lookup = true
+
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 200
+    progress_bar_max_width = 400
+    progress_bar_corner_radius = 2
+    highlight = "#8ab4f8"
+
+    history_length = 50
+    sticky_history = yes
+    idle_threshold = 120
+
+    dmenu = /usr/bin/rofi -dmenu -i -p Action
+    browser = /usr/bin/xdg-open
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = close_current
+    mouse_right_click = context
+
+[urgency_low]
+    background = "#26262b"
+    foreground = "#c4c4cc"
+    timeout = 5
+
+[urgency_normal]
+    background = "#26262b"
+    foreground = "#ececef"
+    timeout = 8
+
+# Critical (e.g. low battery): red border instead of the blue one.
+[urgency_critical]
+    background = "#26262b"
+    foreground = "#ececef"
+    frame_color = "#f47174"
+    highlight = "#f47174"
+    timeout = 0
+
+# Volume/brightness/mic popups from i3/osd.sh: short, not kept in history,
+# and still shown during Do Not Disturb.
+[osd]
+    appname = osd
+    history_ignore = yes
+    override_pause_level = 60
+    format = "<b>%s</b>"
